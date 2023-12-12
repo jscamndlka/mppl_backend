@@ -1,10 +1,11 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
+import User from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 
-const User = db.define(
-  "user",
+const Report = db.define(
+  "report",
   {
     uuid: {
       type: DataTypes.STRING,
@@ -14,24 +15,43 @@ const User = db.define(
         notEmpty: true,
       },
     },
-    name: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [3, 100],
       },
     },
-    email: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
-        isEmail: true,
       },
     },
-    password: {
+    status: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    startTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    endTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    duration: {
+      type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -44,7 +64,14 @@ const User = db.define(
         notEmpty: true,
       },
     },
-    role: {
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    url: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -57,4 +84,7 @@ const User = db.define(
   }
 );
 
-export default User;
+User.hasMany(Report);
+Report.belongsTo(User, { foreignKey: "userId" });
+
+export default Report;
