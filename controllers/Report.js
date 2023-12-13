@@ -1,6 +1,7 @@
 import Report from "../models/ReportModel.js";
 import { Op } from "sequelize";
 import path from "path";
+import User from "../models/UserModel.js";
 export const getReports = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 0;
@@ -31,6 +32,9 @@ export const getReports = async (req, res) => {
       totalRows = await Report.count({ where: divisionWhere });
       result = await Report.findAll({
         where: divisionWhere,
+        include: {
+          model: User,
+        },
         offset,
         limit,
         order: [["id", "DESC"]],
@@ -44,6 +48,9 @@ export const getReports = async (req, res) => {
       totalRows = await Report.count({ where: thlWhere });
       result = await Report.findAll({
         where: thlWhere,
+        include: {
+          model: User,
+        },
         offset,
         limit,
         order: [["id", "DESC"]],
@@ -52,6 +59,9 @@ export const getReports = async (req, res) => {
       totalRows = await Report.count({ where: whereCondition });
       result = await Report.findAll({
         where: whereCondition,
+        include: {
+          model: User,
+        },
         offset,
         limit,
         order: [["id", "DESC"]],
@@ -79,8 +89,11 @@ export const getReportById = async (req, res) => {
       where: {
         uuid: req.params.id,
       },
+      include: {
+        model: User,
+      },
     });
-    res.status(200).json(report);
+    res.status(200).json({ message: "Berhasil", result: report });
   } catch (error) {}
 };
 
